@@ -1,3 +1,5 @@
+from ast import arg
+import threading
 from common import ConnectedLimiar, ConnectedPixel, MovingMeanLimiar
 from common import determina_lista_pesquisa
 import numpy as np
@@ -5,11 +7,16 @@ import matplotlib.pyplot as plt
 import cv2 as cv
 import imutils
 
-def bfs_factory(img_: np.ndarray, start_point: ConnectedPixel, thresh: int, color: tuple, neighboor_size: tuple = (3,3)):
+def bfs_factory(img_: np.ndarray, thresh: int, color: tuple, neighboor_size: tuple = (3,3)):
     cp = img_.copy()
-    def bfs(img: np.ndarray = cp, queue: list[ConnectedPixel] = [start_point],
-            pesquisados: np.ndarray = np.zeros(cp.shape), neighboor_size: tuple = neighboor_size,
-            thresh: int = thresh, color: int = color, cls: ConnectedPixel = type(start_point), i_=0):
+    pesquisados = np.zeros(cp.shape)
+    def bfs(start_point: ConnectedPixel,
+            img: np.ndarray = cp, 
+            pesquisados: np.ndarray = pesquisados, 
+            neighboor_size: tuple = neighboor_size,
+            thresh: int = thresh, 
+            color: int = color, i_=0):
+        queue: list[ConnectedPixel] = [start_point]
         while True:
             try:
                 (i, j) = queue[0].point_
@@ -36,13 +43,19 @@ def bfs_factory(img_: np.ndarray, start_point: ConnectedPixel, thresh: int, colo
                 i_ += 1
                 continue
             return img
-    return bfs
 
-img = cv.imread('../images/test.jpg', 0)
-img_ = imutils.resize(img, width=100)
-start_point = MovingMeanLimiar(point=(40, 60), current_mean=img_[40, 60])
-# start_point = ConnectedLimiar(point=(40, 60))
-bfs = bfs_factory(img_, start_point, 51, 255, (2,2))
-cp = bfs()
-plt.imshow(cp)
+    def get():
+        return cp
+
+    return bfs, get
+
+img = cv.imread('images/test.jpg', 0)
+img_ = imutils.resize(img, width=200)
+bfs, get = bfs_factory(img_, 40, 255, (2, 2))
+
+start_point = MovingMeanLimiar(point=(104, 148), current_mean=img_[2*52, 2*74])
+cp = bfs(start_point)
+_, cp = cv.threshold(cp, 254, 255, cv.THRESH_BINARY)
+# plt.imshow(bin, cmap='gray')
+plt.imshow(cp, cmap='gray')
 plt.show()
