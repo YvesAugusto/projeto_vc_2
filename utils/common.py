@@ -41,6 +41,31 @@ class ConnectedLimiar(ConnectedPixel):
     def __repr__(self):
         return f'point: {self.point}, origin: {self.root}'
 
+class WatershedLimiar(ConnectedPixel):
+
+    def __init__(self, point, root = None) -> None:
+        self.point = point
+        self.root = root
+        if root is None:
+            self.root = point
+
+    @property
+    def point_(self):
+        return self.point
+
+    def determina_continuidade_no_root(self, img_, thresh):
+        (i, j), (p_i, p_j) = self.point, self.root
+        if img_[i, j] > img_[p_i, p_j]:
+            return True
+        return False
+
+    def cria_ramo(self, dst, img_):
+        return ConnectedLimiar(point=dst, root=self.point)
+        
+
+    def __repr__(self):
+        return f'point: {self.point}, origin: {self.root}'
+
 class MovingMeanLimiar(ConnectedPixel):
 
     def __init__(self, point, current_mean, count=None) -> None:
