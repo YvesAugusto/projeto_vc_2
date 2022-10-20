@@ -50,11 +50,14 @@ def bfs_factory(img_: np.ndarray, thresh: int, color: tuple, neighboor_size: tup
 if __name__ == '__main__':
     img = cv.imread('images/test.jpg', 0)
     img_ = imutils.resize(img, width=200)
-    bfs, get = bfs_factory(img_, 40, 255, (2, 2))
+    img_ = cv.medianBlur(img_, 3)
+    bfs, get = bfs_factory(img_, 20, 255, (1, 1))
 
-    start_point = MovingMeanLimiar(point=(104, 148), current_mean=img_[2*52, 2*74])
+    # start_point = MovingMeanLimiar(point=(104, 148), current_mean=img_[2*52, 2*74])
+    start_point = ConnectedLimiar((104, 148))
     cp = bfs(start_point)
     _, cp = cv.threshold(cp, 254, 255, cv.THRESH_BINARY)
+    cv.imwrite("images/gr_thresh_1x1.png", cp)
     # plt.imshow(bin, cmap='gray')
     plt.imshow(cp, cmap='gray')
     plt.show()

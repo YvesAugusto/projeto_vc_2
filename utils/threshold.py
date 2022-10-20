@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 
-def movingThreshold(img_, n, b):
-    img = img_.copy()
+def movingThreshold(img, n, b):
+    # img = img_.copy()
     img[1:-1:2, :] = np.fliplr(img[1:-1:2, :])  #  Vector flip 
     f = img.flatten()  #  Flatten to one dimension 
     ret = np.cumsum(f)
@@ -19,12 +19,12 @@ img2 = cv2.imread("images/nome_4.jpeg", 0)
 
 ret1, imgOtsu1 = cv2.threshold(img1, 127, 255, cv2.THRESH_OTSU)
 ret2, imgOtsu2 = cv2.threshold(img2, 127, 255, cv2.THRESH_OTSU)
-cv2.imwrite("images/otsu_1.png", imgOtsu1)
-cv2.imwrite("images/otsu_2.png", imgOtsu1)
+# cv2.imwrite("images/otsu_1.png", imgOtsu1)
+# cv2.imwrite("images/otsu_2.png", imgOtsu1)
 imgMoveThres1 = movingThreshold(img1, 30, 0.8)
 imgMoveThres2 = movingThreshold(img2, 30, 0.8)
-cv2.imwrite("images/moving_mean_1.png", imgMoveThres1)
-cv2.imwrite("images/moving_mean_2.png", imgMoveThres2)
+# cv2.imwrite("images/moving_mean_1.png", imgMoveThres1)
+# cv2.imwrite("images/moving_mean_2.png", imgMoveThres2)
 plt.figure(figsize=(9, 6))
 plt.subplot(231), plt.axis('off'), plt.title("Origin")
 plt.imshow(img1, 'gray')
