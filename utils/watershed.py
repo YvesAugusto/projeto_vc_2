@@ -1,7 +1,5 @@
 '''
-Author: Manohar Mukku
-Date: 06.12.2018
-Desc: Watershed Segmentation algorithm
+Créditos a Manohar Mukku
 GitHub: https://github.com/manoharmukku/watershed-segmentation
 '''
 
