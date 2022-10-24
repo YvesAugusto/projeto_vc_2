@@ -31,13 +31,13 @@ def distance_transform_info(img: np.ndarray):
     # img_ = cv.GaussianBlur(img_, (13, 13), 0)
     # bin = movingThreshold(img_, 90, 0.95).astype(np.uint8)
     bin = cv.GaussianBlur(bin, (3, 3), 0)
-    plt.imshow(bin)
+    plt.imshow(bin, cmap='gray')
     plt.show()
     bin = 255 - bin
     kernel = np.ones((3,3),np.uint8)
     opening = cv.morphologyEx(bin, cv.MORPH_OPEN, kernel, iterations = 2)
     dt = cv.distanceTransform(opening, cv.DIST_L2, 3)
-    plt.imshow(dt)
+    plt.imshow(dt, cmap='gray')
     plt.show()
     dt = cv.normalize(dt, None, 0, 255, cv.NORM_MINMAX)
     dt = 255 - dt
@@ -182,9 +182,9 @@ def main(argv):
     # seg_image = cv.resize(cv.imread("images/target.png", 0), (0,0), None, 0.5, 0.5)
     # numpy_horiz = np.hstack((input_image, seg_image))
     fig, ax = plt.subplots(1, 3)
-    ax[0].imshow(img)
-    ax[1].imshow(dt)
-    ax[2].imshow(segmented_image_)
+    ax[0].imshow(img, cmap='gray')
+    ax[1].imshow(dt, cmap='gray')
+    ax[2].imshow(segmented_image_, cmap='gray')
     plt.show()
 
     # cv2.imshow('Input image ------------------------ Segmented image', numpy_horiz)
